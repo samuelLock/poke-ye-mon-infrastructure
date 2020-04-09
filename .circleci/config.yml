@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@1.0.0
+
+jobs:
+  deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - setup_remote_docker
+      - aws-cli/install
+      - aws-cli/setup
+      - run: 
+          name: Clone service src code
+          command: git clone https://github.com/samuelLock/pok-ye-mon.git
+      - run:
+          name: Enable write permossions to local binary directory #(I don't like this approach but I couldn't find another option)
+          command: sudo chmod +w /usr/local/bin/
+      - run:
+          name: Download AWS ECS v2 CLI binary 
+          command: sudo curl -Lo /usr/local/bin/ecs-preview https://github.com/aws/amazon-ecs-cli-v2/releases/download/v0.0.7/ecs-preview-linux-v0.0.7 && sudo chmod +x /usr/local/bin/ecs-preview && ecs-preview --help
+      - run:
+          name: Create ECS project and deploy service
+          command: cd poke-ye-mon && ecs-preview init --project poke-ye-mon -app poke-ye-mon-app --app-type 'Load Balanced Web App' --dockerfile './Dockerfile' --port 5000 --deploy
+      
+
+workflows:
+  main:
+    jobs:
+      - deploy
