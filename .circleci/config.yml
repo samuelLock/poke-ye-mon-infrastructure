@@ -22,7 +22,7 @@ jobs:
           command: sudo curl -Lo /usr/local/bin/ecs-preview https://github.com/aws/amazon-ecs-cli-v2/releases/download/v0.0.7/ecs-preview-linux-v0.0.7 && sudo chmod +x /usr/local/bin/ecs-preview && ecs-preview --help
       - run:
           name: Create ECS project and deploy service
-          command: cd poke-ye-mon && ecs-preview init --project poke-ye-mon -app poke-ye-mon-app --app-type 'Load Balanced Web App' --dockerfile './Dockerfile' --port 5000 --deploy
+          command: cd pok-ye-mon && ecs-preview init --project pok-ye-mon -app pok-ye-mon-app --app-type 'Load Balanced Web App' --dockerfile './Dockerfile' --port 5000 --deploy
       
 
 workflows:
